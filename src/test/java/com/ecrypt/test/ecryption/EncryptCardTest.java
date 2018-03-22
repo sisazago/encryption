@@ -21,10 +21,12 @@ public class EncryptCardTest {
          * */
         String value = "5475142315756318";
 
-        String encrypted = EncryptionUtil.desedeEncryptHex(value, DESEDE_KEY);
-        System.out.println(encrypted);
-        String decrypt = EncryptionUtil.desedeDecryptHex(encrypted, DESEDE_KEY);
-        System.out.println(decrypt);
-        Assert.assertTrue(decrypt.equals(value));
+        if(CardUtils.isValidCreditCardNumber(value)){
+            String encrypted = EncryptionUtil.desedeEncryptHex(value, DESEDE_KEY);
+            System.out.println(encrypted);
+            String decrypt = EncryptionUtil.desedeDecryptHex(encrypted, DESEDE_KEY);
+            System.out.println(decrypt);
+            Assert.assertTrue(decrypt.equals(value));
+        }
     }
 }
