@@ -1,19 +1,27 @@
 package com.ecrypt.test.ecryption;
 
+import com.ecrypt.test.ecryption.common.PropertiesConstants;
+import com.ecrypt.test.ecryption.util.CardUtils;
+import com.ecrypt.test.ecryption.util.EncryptionUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.math.BigDecimal;
-
 public class EncryptCardTest {
-
-    private static final String DESEDE_KEY = "50146911B88D22537B6560D272BE3C6A716305F9E49965EB";
 
     private static final Long MAX_CARD_VALUE = Long.valueOf("9999999999");
 
+    private static final String DES_DATE_COMPLEMENT = "FFFFFFFFFFF";
+
+    private static final String DES_STATIC_DATE = "12021";
+
     @Test
     public void encryptCardOrDate() throws Exception {
+
+        String cardDate = DES_STATIC_DATE+DES_DATE_COMPLEMENT;
+
+        String encryptedDate = EncryptionUtil.desedeEncryptHex(cardDate, PropertiesConstants.DESEDE_KEY);
+        System.out.println("Encrypted Date: "+encryptedDate);
         /**
          * Para encriptar una fecha se debe de seguir el siguiente patron: mes representado con dos dígitos MM,
          * sigue el valor 0 y finalmente se pone el valor del año representado con dos dígitos YY, como este debe
@@ -24,22 +32,30 @@ public class EncryptCardTest {
          * si se quiere encriptar mas de una tarjeta estas deben de estar separadas por comas y sin espacios
          * Ejemplo: 5587842453817293,5546272453817293,5512762453817293
          * */
-        String value = "547514";
+        String value = "547532";
+
+        int numberOfCards = 0;
 
         String cardToValidate = "";
-        Long cardNumber = Long.valueOf(0);
+        Long cardNumber = Long.valueOf(30);
         while (cardNumber < MAX_CARD_VALUE ){
-            String card = StringUtils.leftPad(cardNumber.toString(), 10, '0');
-            cardToValidate = value + card;
+            String card = StringUtils.leftPad(cardNumber.toString(), 10, '2');
+            cardToValidate = value+ card;
 
             if(CardUtils.isValidCreditCardNumber(cardToValidate)){
-                String encrypted = EncryptionUtil.desedeEncryptHex(cardToValidate, DESEDE_KEY);
-                System.out.println(encrypted);
-                String decrypt = EncryptionUtil.desedeDecryptHex(encrypted, DESEDE_KEY);
-                System.out.println(decrypt);
+                System.out.println("------------------------------------------------------");
+                String encrypted = EncryptionUtil.desedeEncryptHex(cardToValidate, PropertiesConstants.DESEDE_KEY);
+                System.out.println("Test value ----> " + encrypted);
+                String decrypt = EncryptionUtil.desedeDecryptHex(encrypted, PropertiesConstants.DESEDE_KEY);
+                System.out.println("Card that was submit ---> " + decrypt);
                 Assert.assertTrue(decrypt.equals(cardToValidate));
-            }else{
-                System.out.println("Not valid: "+ cardToValidate);
+                System.out.println("------------------------------------------------------");
+
+                if(numberOfCards == 20){
+                    break;
+                }else{
+                    numberOfCards ++;
+                }
             }
 
             cardNumber++;

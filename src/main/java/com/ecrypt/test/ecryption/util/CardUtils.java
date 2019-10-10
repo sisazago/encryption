@@ -1,4 +1,4 @@
-package com.ecrypt.test.ecryption;
+package com.ecrypt.test.ecryption.util;
 
 import org.apache.commons.validator.routines.CreditCardValidator;
 

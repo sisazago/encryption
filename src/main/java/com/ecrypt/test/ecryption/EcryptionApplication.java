@@ -9,4 +9,6 @@ public class EcryptionApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(EcryptionApplication.class, args);
 	}
+
+
 }
