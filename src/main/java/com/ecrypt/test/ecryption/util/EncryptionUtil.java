@@ -6,6 +6,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.spec.KeySpec;
 
 import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESedeKeySpec;
@@ -121,5 +122,24 @@ public class EncryptionUtil {
             }
         }
         return decryptedValue;
+    }
+
+    public static String desEdeKeyCreation(){
+        String desKey = "";
+        try {
+            KeyGenerator gen = KeyGenerator.getInstance(PropertiesConstants.DESEDE_TRANSFORMATION);
+            gen.init(112);
+            SecretKey key = gen.generateKey();
+
+            SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance(PropertiesConstants.DESEDE_TRANSFORMATION);
+            DESedeKeySpec keySpec = (DESedeKeySpec) secretKeyFactory.getKeySpec(key, DESedeKeySpec.class);
+            byte [] rawKey = keySpec.getKey();
+
+            desKey = Hex.encodeHexString(rawKey).toUpperCase();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return desKey;
+
     }
 }

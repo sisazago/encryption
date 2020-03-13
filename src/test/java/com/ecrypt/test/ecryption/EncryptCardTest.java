@@ -32,7 +32,7 @@ public class EncryptCardTest {
          * si se quiere encriptar mas de una tarjeta estas deben de estar separadas por comas y sin espacios
          * Ejemplo: 5587842453817293,5546272453817293,5512762453817293
          * */
-        String value = "547532";
+        String value = "454476";
 
         int numberOfCards = 0;
 
